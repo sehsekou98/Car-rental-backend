@@ -27,4 +27,4 @@ Users can browse cars, book cars, and admins can manage the fleet.
 
 ## Author
 Sekou S Seh
-GitHub: https//git.com.sehsekou98
+GitHub: https//git.com/sehsekou98
