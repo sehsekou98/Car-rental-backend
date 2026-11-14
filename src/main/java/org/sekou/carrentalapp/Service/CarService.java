@@ -13,7 +13,7 @@ public class CarService {
     public CarService(CarRepository carRepository) {
         this.carRepository = carRepository;
     }
-    public List<Car> findAllCars() {
+    public List<Car> getAllCars() {
         return carRepository.findAll();
     }
     public List<Car> getAvailableCars() {
@@ -22,4 +22,6 @@ public class CarService {
     public Car addCar(Car car) {
         return carRepository.save(car);
     }
+
+
 }
