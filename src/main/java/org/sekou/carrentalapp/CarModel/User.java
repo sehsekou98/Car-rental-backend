@@ -23,7 +23,8 @@ public class User {
     private String email;
     private String password;
 
-    @Enumerated(EnumType.STRING)
     private String phone;
+
+    @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 }

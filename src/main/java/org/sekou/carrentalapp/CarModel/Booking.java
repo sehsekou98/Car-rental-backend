@@ -25,12 +25,13 @@ public class Booking {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "car_id", nullable = false)
     private Car car;
 
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private double totalPrice;
 
+    @Enumerated(EnumType.STRING)
     private BookingStatus status = BookingStatus.PENDING;
 }

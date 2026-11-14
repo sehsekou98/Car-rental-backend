@@ -20,6 +20,7 @@ public class Car {
     private Long id;
     private String brand;
     private String model;
+    @Column(name = "manufacture_year")
     private String year;
     private String color;
 
