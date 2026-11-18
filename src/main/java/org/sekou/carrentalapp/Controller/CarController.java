@@ -14,21 +14,40 @@ public class CarController {
     private final CarService carService;
 
     public CarController(CarService carService) {
+
         this.carService = carService;
     }
 
     @GetMapping
     public List<Car> getAllCars() {
+
         return carService.getAllCars();
     }
 
     @GetMapping("/available")
     public List<Car> getAvailableCars() {
+
         return carService.getAvailableCars();
     }
 
     @PostMapping
     public Car addCar(@RequestBody Car car) {
+
         return carService.addCar(car);
+    }
+
+    @GetMapping("/{id}")
+    public Car getCarById(@PathVariable Long id) {
+        return carService.getCarById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Car updateCar(@PathVariable Long id, @RequestBody Car car) {
+        return carService.updateCar(id, car);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteCar(@PathVariable Long id) {
+        carService.deleteCarById(id);
     }
 }
