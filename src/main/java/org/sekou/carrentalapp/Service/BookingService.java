@@ -41,6 +41,26 @@ public class BookingService {
     }
 
     public List<Booking> getBookingsByUser(Long userId) {
+
         return bookingRepository.findByUserId(userId);
+    }
+
+    public Booking getBookingById(Long id) {
+        return bookingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Booking not found with id: " + id));
+    }
+
+    public List<Booking> getAllBookings() {
+        return bookingRepository.findAll();
+    }
+
+    public Booking cancelBooking(Long id) {
+        Booking booking = getBookingById(id);
+        Car car = booking.getCar();
+        car.setAvailable(true);
+        carRepository.save(car);
+
+        booking.setStatus(BookingStatus.CANCELLED);
+        return bookingRepository.save(booking);
     }
 }
