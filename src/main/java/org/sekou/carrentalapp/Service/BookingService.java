@@ -63,4 +63,60 @@ public class BookingService {
         booking.setStatus(BookingStatus.CANCELLED);
         return bookingRepository.save(booking);
     }
+
+    public Booking updateBooking(Long id,Booking updateBooking) {
+        Booking existingBooking = getBookingById(id);
+
+        // If the user changes the car
+        if(existingBooking.getCar() != null &&
+                !existingBooking.getCar().getId().equals(updateBooking.getCar().getId())) {
+
+            // Free old car
+            Car oldCar = existingBooking.getCar();
+            oldCar.setAvailable(true);
+            carRepository.save(oldCar);
+
+            // Check new car
+             Car newCar = carRepository.findById(updateBooking.getCar().getId())
+                     .orElseThrow(() -> new RuntimeException("Car not found"));
+             if (!newCar.isAvailable()) {
+                 throw new RuntimeException("Car is not available");
+             }
+             newCar.setAvailable(false);
+             carRepository.save(newCar);
+
+             existingBooking.setCar(newCar);
+        }
+
+        // If user changes Dates - recalculate price
+
+        if (updateBooking.getStartDate() != null) {
+            existingBooking.setStartDate(updateBooking.getStartDate());
+        }
+        if (updateBooking.getEndDate() != null) {
+            existingBooking.setEndDate(updateBooking.getEndDate());
+        }
+        long days = ChronoUnit.DAYS.between(existingBooking.getStartDate(), existingBooking.getEndDate());
+        if (days <= 0) days = 1;
+        double total = days * existingBooking.getCar().getPricePerDay();
+        existingBooking.setTotalPrice(total);
+
+        // If user changes Status (e.g CONFIRMED -> CANCELLED)
+
+        if(existingBooking.getStatus() != null)
+            existingBooking.setStatus(existingBooking.getStatus());
+        // If cancelled via update, free the car as well
+
+        if(updateBooking.getStatus() == BookingStatus.CANCELLED) {
+            Car car = existingBooking.getCar();
+            car.setAvailable(false);
+            carRepository.save(car);
+        }
+
+        return bookingRepository.save(existingBooking);
+    }
+
+
+
+
 }
